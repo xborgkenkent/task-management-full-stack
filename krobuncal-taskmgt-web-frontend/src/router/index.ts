@@ -30,14 +30,14 @@ router.beforeEach(async (to, from, next) => {
       credentials: "include",
     });
 
-    console.log("bruuh" + res.status);
+    console.debug("bruuh" + res.status);
     if (to.meta.requiresAuth && res.status !== 200) {
       next("/login");
     } else {
       next();
     }
   } catch (error) {
-    console.log(error);
+    console.debug(error);
     next("/login");
   }
 });

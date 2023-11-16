@@ -34,7 +34,7 @@ const taskname = ref('')
 
 const editTask = () => {
 
-	console.log(board.user, board.boardId)
+	console.debug(board.user, board.boardId)
 	const formData = new FormData()
 	formData.append("caption", board.selectedTask.caption)
 	fetch(`http://localhost:9000/board/task/edit/${board.selectedTask.id}`, {

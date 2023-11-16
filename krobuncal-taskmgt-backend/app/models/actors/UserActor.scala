@@ -11,11 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class UserActor(out: ActorRef/*, postService: PostImageService*/) extends Actor:
   override def preStart(): Unit =
     UserActor.sockets += out
-    // TODO: Insert code on actor creation here
-    // postService.getAllPost().map { posts =>
-    //   val outMessage = Json.toJson(posts)
-    //   UserActor.sockets.foreach(socket => socket ! outMessage)
-    // }
+    
 
   override def receive = {
     // TODO: Insert code on websocket message received here

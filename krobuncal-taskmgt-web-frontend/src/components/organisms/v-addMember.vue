@@ -40,7 +40,7 @@ const boardName = ref('')
 
 const addMember = () => {
 
-	console.log(board.user, board.boardId)
+	console.debug(board.user, board.boardId)
 	const formData = new FormData()
 	formData.append("boardId", board.boardId)
 	formData.append("memberId", board.user)

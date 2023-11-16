@@ -40,7 +40,7 @@ const placeHolderDesc = "Enter description";
 const comment = ref('')
 
 const addComment = () => {
-	console.log(comment.value, board.taskId)
+	console.debug(comment.value, board.taskId)
 	const formData = new FormData()
 	formData.append("comment", comment.value)
 	formData.append("taskId", board.taskId)

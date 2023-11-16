@@ -42,14 +42,14 @@ const comment = ref('')
 const openModal = (id: string) => {
     modal.openComment = true
     board.taskId = id
-    console.log(id)
+    console.debug(id)
 }
 
 const openEditTask = (item) => {
     modal.openEditTask = true
     board.selectedTask.id = item.id
     board.selectedTask.caption = item.caption
-    console.log(item)
+    console.debug(item)
 }
 </script>
 

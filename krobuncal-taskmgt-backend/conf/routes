@@ -1,26 +1,24 @@
-GET    /              controllers.HomeController.index()
-GET    /dashboard       controllers.UserController.dashboard()
+GET /              controllers.HomeController.index()
 
-GET    /session         controllers.SessionController.session()
+GET /session         controllers.SessionController.session()
 
-GET     /socket         controllers.UserController.socket()
-POST    /register     controllers.UserController.register()
-POST    /login        controllers.UserController.login()
-GET     /users          controllers.UserController.getUsers()
-GET     /users/:id      controllers.BoardController.isOwner(id)
+GET /socket         controllers.UserController.socket()
+POST /register     controllers.UserController.register()
+POST /login        controllers.UserController.login()
+GET /users          controllers.UserController.getUsers()
 
-POST    /board          controllers.BoardController.addBoard()
-POST    /board/member   controllers.BoardController.addMember()
-POST    /board/task     controllers.TaskController.addTask()
+POST /board          controllers.BoardController.addBoard()
+POST /board/member   controllers.BoardController.addMember()
+POST /board/task     controllers.TaskController.addTask()
 
-GET     /board          controllers.BoardController.getBoards()
-GET     /board/task/:id     controllers.TaskController.getTask(id)
-GET     /board/member/:id   controllers.BoardController.getBoardMembers(id)
-GET     /board/delete/:id    controllers.BoardController.deleteBoard(id)
+GET /board          controllers.BoardController.getBoards()
+GET /board/task/:id     controllers.TaskController.getTask(id)
+GET /board/member/:id   controllers.BoardController.getBoardMembers(id)
+GET /board/delete/:id    controllers.BoardController.deleteBoard(id)
 
-POST    /board/task/comment     controllers.CommentController.addComment()
-POST    /board/:id              controllers.BoardController.editBoard(id)
+POST /board/task/comment     controllers.CommentController.addComment()
+POST /board/:id              controllers.BoardController.editBoard(id)
 
-POST    /board/task/edit/:id    controllers.TaskController.editTask(id)
+POST /board/task/edit/:id    controllers.TaskController.editTask(id)
 
-GET     /board/task/comments/all controllers.CommentController.getComments()
+GET /board/task/comments/all controllers.CommentController.getComments()

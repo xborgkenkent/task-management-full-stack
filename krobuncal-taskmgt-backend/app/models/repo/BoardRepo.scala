@@ -30,7 +30,6 @@ final class BoardRepo @Inject() (
     def id = column[UUID]("ID", O.PrimaryKey)
     def name = column[String]("NAME", O.Length(255, true))
     def ownerId = column[UUID]("OWNER_ID")
- 
 
     def * =
       (id, name, ownerId).mapTo[Board]
@@ -45,11 +44,18 @@ final class BoardRepo @Inject() (
   def addBoard(board: Board) =
     db.run(boardTable returning boardTable.map(_.id) += board)
 
-  def getBoardByOwner(id: UUID) = db.run(boardTable.filter(_.ownerId===id).result)
+  def getBoardByOwner(id: UUID) =
+    db.run(boardTable.filter(_.ownerId === id).result)
 
-  def authorization(id: UUID, ownerId: UUID) = db.run(boardTable.filter(b => b.id===id && b.ownerId===ownerId).result.headOption)
+  def authorization(id: UUID, ownerId: UUID) = db.run(
+    boardTable
+      .filter(b => b.id === id && b.ownerId === ownerId)
+      .result
+      .headOption
+  )
 
-  def deleteBoardById(id: UUID) = db.run(boardTable.filter(_.id===id).delete)
+  def deleteBoardById(id: UUID) = db.run(boardTable.filter(_.id === id).delete)
 
-  def editBoard(id: UUID, name: String) = db.run(boardTable.filter(_.id===id).map(_.name).update(name))
+  def editBoard(id: UUID, name: String) =
+    db.run(boardTable.filter(_.id === id).map(_.name).update(name))
 }

@@ -1,30 +1,39 @@
 package security
 
-import javax.inject._
-import play.api._
-import play.api.mvc._
-import scala.concurrent._
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
+import java.util.UUID
+import play.api.mvc.*
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.util.Try
 
-class UserRequest[A](val userId: Option[String], request: Request[A])
-    extends WrappedRequest[A](request)
+protected class UserRequest[A](
+  val userId: UUID,
+  request: Request[A],
+) extends WrappedRequest[A](request)
 
 @Singleton
-class Authenticator @Inject() (val parser: BodyParsers.Default)(implicit
-  ec: ExecutionContext
-) extends ActionBuilder[UserRequest, AnyContent] {
-  val logger = Logger(this.getClass)
+final class Authenticator @Inject() (
+  val parser: BodyParsers.Default
+)(using val executionContext: ExecutionContext)
+    extends ActionBuilder[UserRequest, AnyContent]
+    with ActionRefiner[Request, UserRequest]:
+  override protected def refine[A](
+    request: Request[A]
+  ): Future[Either[Result, UserRequest[A]]] =
+    val userIdOpt: Option[UUID] =
+      request.session
+        .get("userId")
+        .flatMap: userIdString =>
+          Try:
+            UUID.fromString(userIdString)
+          .toOption
 
-  protected def executionContext: scala.concurrent.ExecutionContext = ec
-  override def invokeBlock[A](
-    request: Request[A],
-    block: UserRequest[A] => Future[Result],
-  ): Future[Result] = {
-    request.session.get("userId") match {
-      case Some(userId) =>
-        block(new UserRequest(Some(userId), request))
+    userIdOpt match
       case None =>
-        block(new UserRequest(None, request))
-    }
-  }
-}
+        Future.successful(Left(Results.Unauthorized))
+      case Some(userId) =>
+              Future.successful(Right(new UserRequest(userId, request)))
+  end refine
+end Authenticator

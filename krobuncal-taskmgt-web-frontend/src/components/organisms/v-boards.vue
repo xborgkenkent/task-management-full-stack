@@ -26,9 +26,9 @@ const modal = useModal()
 
 const openModal = (item) => {
     const data = JSON.parse(JSON.stringify(item))
-    console.log(data)
+    console.debug(data)
     board.selectedBoard.id = data.id
-    console.log(board.selectedBoard.id)
+    console.debug(board.selectedBoard.id)
     board.selectedBoard.name = data.name
     board.selectedBoard.ownerId = data.ownerId
     modal.openEditBoard = true

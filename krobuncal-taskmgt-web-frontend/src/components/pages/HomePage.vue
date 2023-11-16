@@ -4,7 +4,7 @@
 			<div class="main">
 				<div class="left">
 					<h2>List of Boards</h2>
-					<VBoard :items="board.boards"/>
+					<VBoard :items="board.boards" v-if="board.boards.length>0"/>
 					<VButton @click="modal.open = true">Add Boards</VButton>
 				</div>
 				<div class="right">
@@ -25,9 +25,6 @@
 import { ref, watch, onMounted } from "vue";
 import HomePage from "../template/HomePage.vue";
 import { useModal } from "../../stores/page"
-import VLogo from "../atoms/v-logo.vue";
-import VSpan from "../atoms/v-span.vue";
-import VVerticalNav from "../molecules/v-verticalNav.vue";
 import VAddBoard from "../organisms/v-addBoard.vue";
 import VAddMember from "../organisms/v-addMember.vue";
 import VAddComment from "../organisms/v-addComment.vue";
@@ -63,32 +60,32 @@ const links: { to: string; name: string }[] = [
 
 const openModal = () => {
 	modal.open = true;
-	console.log(modal.open);
+	console.debug(modal.open);
 };
 
 const socket = new WebSocket("ws://localhost:9000/socket");
 
 socket.onopen = () => {
-	console.log("connected");
+	console.debug("connected");
 }
 
 socket.onmessage = (event) => {
 	const data = JSON.parse((event.data))
 	const id = localStorage.getItem("id")
-	board.boards = data.board
-	board.boardMembers = data.boardMember
-	// const a = board.boardMembers.filter(bm => bm.memberId===id)
-	// console.log(a)
+	board.boards = data.boardMember[1]
+	board.boardMembers = data.boardMember[0]
+
+	console.log(board.boards)
+	console.log(board.boardMembers)
+
+
+
 	board.tasks = data.task
 	board.comments = data.comment
-	//boardMember: Array [ {…} ]
- //0: Object { boardId: "e24ea9ea-a6cc-4af9-92d5-ca0debb75bcd", memberId: "7bfc2250-c17c-437a-8d4a-359a22d01736" }
-
-
 }
 
 socket.onclose = () => {
-	console.log("disconnected");
+	console.debug("disconnected");
 }
 onMounted(() => {
     fetch("http://localhost:9000/board", {
@@ -102,7 +99,14 @@ onMounted(() => {
             }
         })
             .then((data) => {
-				board.boards = [...data,...board.boards]
+				data.map((item) => {
+					board.boards = item[1]
+					board.boardMembers = item[0]
+				})
+
+				console.log(board.boards)
+				// board.boards = data[1]
+				// board.boardMembers = data[0]
                 console.log(data)
             })
 
@@ -119,7 +123,7 @@ onMounted(() => {
             .then((data) => {
 				board.users = data
 				board.user.name = board.users[0].name
-                console.log(data)
+                console.debug(data)
             })
 })
 

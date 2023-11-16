@@ -61,13 +61,13 @@ class UserController @Inject() (
           Future.successful(BadRequest)
         },
         user => {
-          println("yeeyy" + user._1 + " " + user._2)
           userRepo
             .findUserByUsernameAndPassword(user._1, user._2)
             .map(u => {
               u match {
-                case Some(u) => Ok(Json.toJson(u)).withSession("userId" -> u.id.toString)
-                case None    => Unauthorized
+                case Some(u) =>
+                  Ok(Json.toJson(u)).withSession("userId" -> u.id.toString)
+                case None => Unauthorized
               }
             })
         },
@@ -77,17 +77,13 @@ class UserController @Inject() (
   def logout() = Action.async { implicit request =>
     Future.successful(Ok.withNewSession)
   }
-  def dashboard() = authenticator.async { implicit request =>
-    request.session.get("userId") match {
-      case Some(userId) => Future.successful(Ok)
-      case None         => Future.successful(Unauthorized)
-    }
-  }
 
   def getUsers() = authenticator.async { implicit request =>
     request.session.get("userId") match {
       case Some(userId) => {
-        userRepo.getAllUsersExcept(UUID.fromString(userId)).map(users => Ok(Json.toJson(users)))
+        userRepo
+          .getAllUsersExcept(UUID.fromString(userId))
+          .map(users => Ok(Json.toJson(users)))
       }
       case None => {
         Future.successful(Unauthorized)

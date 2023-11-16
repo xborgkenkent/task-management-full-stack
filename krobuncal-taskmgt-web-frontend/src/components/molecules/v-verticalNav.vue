@@ -22,7 +22,7 @@ defineProps(["links", "withImg", "source"]);
 const page = usePage();
 const setPage = (name: string) => {
 	page.page = name;
-	console.log(page.page);
+	console.debug(page.page);
 };
 </script>
 

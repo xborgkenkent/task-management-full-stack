@@ -46,7 +46,7 @@ const taskname = ref('')
 
 const addTask = () => {
 
-	console.log(board.user, board.boardId)
+	console.debug(board.user, board.boardId)
 	const formData = new FormData()
 	formData.append("boardId", board.boardId)
 	formData.append("caption", taskname.value)
